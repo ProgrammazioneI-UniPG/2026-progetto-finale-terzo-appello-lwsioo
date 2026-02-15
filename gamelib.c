@@ -28,7 +28,7 @@ struct Zona_MondoReale *prima_zona_mondoreale = NULL;
 struct Zona_SopraSotto *prima_zona_soprasotto = NULL;
 static int mappa_pronta = 0;
 
-const char *getNomeZona(enum TipoZona z) {
+static const char *getNomeZona(enum TipoZona z) {
   switch (z) {
   case bosco:
     return "Bosco";
@@ -54,7 +54,7 @@ const char *getNomeZona(enum TipoZona z) {
     return "Sconosciuto";
   }
 }
-const char *getNomeNemico(enum TipoNemico n) {
+static const char *getNomeNemico(enum TipoNemico n) {
   switch (n) {
   case nessun_nemico:
     return "Nessun nemico";
@@ -68,7 +68,7 @@ const char *getNomeNemico(enum TipoNemico n) {
     return "Sconosciuto";
   }
 }
-const char *getNomeOggetto(enum TipoOggetto o) {
+static const char *getNomeOggetto(enum TipoOggetto o) {
   switch (o) {
   case nessun_oggetto:
     return "Nessun oggetto";
@@ -84,7 +84,7 @@ const char *getNomeOggetto(enum TipoOggetto o) {
     return "Sconosciuto";
   }
 }
-char getSimboloOggetto(enum TipoOggetto o) {
+static char getSimboloOggetto(enum TipoOggetto o) {
   switch (o) {
   case bicicletta:
     return 'b';
@@ -98,7 +98,7 @@ char getSimboloOggetto(enum TipoOggetto o) {
     return ' '; // Nessun oggetto
   }
 }
-char getSimboloNemico(enum TipoNemico n) {
+static char getSimboloNemico(enum TipoNemico n) {
   switch (n) {
   case billi:
     return 'W';
@@ -111,7 +111,7 @@ char getSimboloNemico(enum TipoNemico n) {
   }
 }
 
-void svuota_mappa() {
+static void svuota_mappa() {
   struct Zona_MondoReale *temp_mr = prima_zona_mondoreale;
   while (temp_mr != NULL) {
     struct Zona_MondoReale *prossimo_mr = temp_mr->avanti;
@@ -126,7 +126,7 @@ void svuota_mappa() {
   mappa_pronta = 0;
 }
 
-void genera_mappa() {
+static void genera_mappa() {
   svuota_mappa();
 
   struct Zona_MondoReale *ultima_mondoreale = NULL;
@@ -193,7 +193,7 @@ void genera_mappa() {
   printf(GRN "Mappa di 15 zone generata correttamente!" RESET "\n");
 }
 
-void stampa_mappa() {
+static void stampa_mappa() {
   int scelta;
   printf("\nQuale mappa vuoi stampare?\n1) Mondo Reale\n2) Soprasotto\nScelta: ");
   scanf("%d", &scelta);
@@ -218,7 +218,7 @@ void stampa_mappa() {
   }
 }
 
-void stampa_mappa_grafica() {
+static void stampa_mappa_grafica() {
   if (prima_zona_mondoreale == NULL) {
     printf(RED "Errore: Mappa non generata!" RESET "\n");
     return;
@@ -303,7 +303,7 @@ void stampa_mappa_grafica() {
   getchar();
 }
 
-void stampa_zona() {
+static void stampa_zona() {
   int pos, attuale = 0;
 
   printf("Inserisci la posizione della zona da stampare: ");
@@ -343,7 +343,7 @@ void stampa_zona() {
   getchar();
 }
 
-void inserisci_zona() {
+static void inserisci_zona() {
   int pos, attuale = 0;
   printf("In quale posizione vuoi inserire la nuova zona? (0 per la testa): ");
   if (scanf("%d", &pos) != 1 || pos < 0) {
@@ -452,7 +452,7 @@ void inserisci_zona() {
   printf(GRN "\nZona inserita con successo! Ricorda di chiudere la mappa (opzione 7) per salvare.\n" RESET);
 }
 
-void cancella_zona() {
+static void cancella_zona() {
   // controllo se la mappa esiste
   if (prima_zona_mondoreale == NULL) {
     printf(RED"Errore: La mappa è vuota, non c'è nulla da cancellare.\n" RESET);
@@ -514,7 +514,7 @@ void cancella_zona() {
   printf(GRN "Zona in posizione %d e la sua speculare rimosse con successo.\n" RESET, pos);
 }
 
-void menu_mappa() {
+static void menu_mappa() {
   int scelta_mappa;
   do {
     printf(RED "\n--- GESTIONE MAPPA ---\n" RESET);
@@ -761,7 +761,7 @@ void printRules() {
 }
 
 // GESTIONE GIOCO
-void stampa_cella_attuale(struct Giocatore *p) {
+static void stampa_cella_attuale(struct Giocatore *p) {
   char nem = ' ', ogg = ' ';
 
   if (p->mondo == reale) {
@@ -787,7 +787,7 @@ void stampa_cella_attuale(struct Giocatore *p) {
   }
 }
 
-int nemico_vivo(struct Giocatore *p) {
+static int nemico_vivo(struct Giocatore *p) {
   if (p->mondo == reale) {
     return (((struct Zona_MondoReale *)p->posizione)->nemico != nessun_nemico);
   } else {
@@ -795,7 +795,7 @@ int nemico_vivo(struct Giocatore *p) {
   }
 }
 
-void raccogli_oggetto(struct Giocatore *p) {
+static void raccogli_oggetto(struct Giocatore *p) {
   if (p->mondo == soprasotto) {
     printf(RED "Non ci sono oggetti nel Soprasotto!\n" RESET);
     return;
@@ -824,7 +824,7 @@ void raccogli_oggetto(struct Giocatore *p) {
   printf(RED "Lo zaino e' pieno!\n" RESET);
 }
 
-void avanza(struct Giocatore *p) {
+static void avanza(struct Giocatore *p) {
   if (p->ha_mosso) {
     printf(RED "Hai gia' effettuato uno spostamento in questo turno!\n" RESET);
     return;
@@ -848,7 +848,7 @@ void avanza(struct Giocatore *p) {
   printf(GRN "Ti sei spostato in avanti.\n" RESET);
 }
 
-void indietreggia(struct Giocatore *p) {
+static void indietreggia(struct Giocatore *p) {
   if (p->ha_mosso) {
     printf(RED "Hai gia' effettuato uno spostamento!\n" RESET);
     return;
@@ -872,7 +872,7 @@ void indietreggia(struct Giocatore *p) {
   printf(GRN "Sei tornato alla zona precedente.\n" RESET);
 }
 
-void cambia_mondo(struct Giocatore *p) {
+static void cambia_mondo(struct Giocatore *p) {
   if (p->ha_mosso) {
     printf(RED "Hai gia' effettuato uno spostamento!\n" RESET);
     return;
@@ -901,7 +901,7 @@ void cambia_mondo(struct Giocatore *p) {
   printf(RED "VARCO APERTO! Hai cambiato dimensione.\n" RESET);
 }
 
-void stampa_giocatore(struct Giocatore *p) {
+static void stampa_giocatore(struct Giocatore *p) {
   printf(YEL "\n=== STATISTICHE %s ===\n" RESET, p->nome);
   printf("Posizione: %s (%s)\n", getNomeZona((p->mondo == reale) ? ((struct Zona_MondoReale *)p->posizione)->tipo : ((struct Zona_SopraSotto *)p->posizione)->tipo), (p->mondo == reale) ? "Mondo Reale" : "Soprasotto");
   printf("ATK: %d | DEF: %d | LUCK: %d\n", p->attacco_psichico, p->difesa_psichica, p->fortuna);
@@ -909,7 +909,7 @@ void stampa_giocatore(struct Giocatore *p) {
   printf("---------------------------\n");
 }
 
-int sconfiggi_nemico(struct Giocatore *p) {
+static int sconfiggi_nemico(struct Giocatore *p) {
     enum TipoNemico tipo;
     int esito = rand() % 2 + 1;
     
@@ -956,7 +956,7 @@ int sconfiggi_nemico(struct Giocatore *p) {
     return 0;
 }
 
-void trova_demotorzone(struct Giocatore *p) {
+static void trova_demotorzone(struct Giocatore *p) {
     struct Zona_SopraSotto *temp = prima_zona_soprasotto;
     int pos_boss = 0;
     int trovata = 0;
@@ -983,7 +983,7 @@ void trova_demotorzone(struct Giocatore *p) {
     }
 }
 
-int gestisci_zaino(struct Giocatore *p, int *hp_attuale, int isFighting) {
+static int gestisci_zaino(struct Giocatore *p, int *hp_attuale, int isFighting) {
   int o_sc;
   do {
     printf("\n--- ZAINO (%s) ---\n", isFighting ? "COMBATTIMENTO" : "ESPLORAZIONE");
@@ -1058,16 +1058,16 @@ int gestisci_zaino(struct Giocatore *p, int *hp_attuale, int isFighting) {
   return 0;
 }
 
-void combatti(struct Giocatore *p) {
+static void combatti(struct Giocatore *p) {
     enum TipoNemico tipo;
     if (p->mondo == reale) tipo = ((struct Zona_MondoReale*)p->posizione)->nemico;
     else tipo = ((struct Zona_SopraSotto*)p->posizione)->nemico;
 
     // vita e forza dei nemici per rendere giocabile
     int hp_n, forza_n;
-    if (tipo == democane) { hp_n = 20; forza_n = 6; }
+    if (tipo == democane) { hp_n = 25; forza_n = 6; }
     else if (tipo == billi) { hp_n = 30; forza_n = 10; }
-    else if (tipo == demotorzone) { hp_n = 60; forza_n = 15; }
+    else if (tipo == demotorzone) { hp_n = 35; forza_n = 12; }
     else return;
 
     // statistiche originali
@@ -1135,7 +1135,7 @@ void combatti(struct Giocatore *p) {
     }
 }
 
-void passa(struct Giocatore *p) {
+static void passa(struct Giocatore *p) {
     printf("\n" YEL "==========================================" RESET);
     printf("\n  Il giocatore " GRN "%s" RESET " ha deciso di passare.", p->nome);
     printf("\n  Il turno termina qui.");
@@ -1245,8 +1245,7 @@ void gioca() {
             if (p->difesa_psichica <= 0) {
               printf(RED "\n%s è morto. Le sue spoglie restano nel %s...\n" RESET, p->nome, (p->mondo == reale) ? "Mondo Reale" : "Soprasotto");
               printf(GRN "\nPremere INVIO per passare al prossimo giocatore..." RESET);
-              getchar(); 
-              // ----------------------------------------------------
+              getchar();
 
               free(players[i]);  // libera la memoria allocata
               players[i] = NULL; // segna lo slot come vuoto
